@@ -1,33 +1,53 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 
-export default function App2Layout() {
+export default function RealEstateLayout() {
+  const router = useRouter();
+
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        headerStyle: { backgroundColor: '#2C3E50' },
+        headerTintColor: '#fff',
+        tabBarStyle: { backgroundColor: '#2C3E50' },
+        tabBarActiveTintColor: '#E74C3C',
+        tabBarInactiveTintColor: '#95A5A6',
+        headerRight: () => (
+          <TouchableOpacity 
+            onPress={() => router.push('/')}
+            style={{ marginRight: 15 }}
+          >
+            <Ionicons name="home" size={24} color="#fff" />
+          </TouchableOpacity>
+        ),
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Главная',
+          title: 'Поиск',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
+            <Ionicons name="search" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="second"
+        name="sale"
         options={{
-          title: 'Второй',
+          title: 'Продажа',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list" size={size} color={color} />
+            <Ionicons name="pricetag" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="third"
+        name="rent"
         options={{
-          title: 'Третий',
+          title: 'Аренда',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings" size={size} color={color} />
+            <Ionicons name="key" size={size} color={color} />
           ),
         }}
       />

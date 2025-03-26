@@ -1,9 +1,25 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 
 export default function DentalLayout() {
+  const router = useRouter();
+
   return (
-    <Tabs screenOptions={{ headerStyle: { backgroundColor: '#f8f9fa' } }}>
+    <Tabs 
+      screenOptions={{ 
+        headerStyle: { backgroundColor: '#f8f9fa' },
+        headerRight: () => (
+          <TouchableOpacity 
+            onPress={() => router.push('/')}
+            style={{ marginRight: 15 }}
+          >
+            <Ionicons name="home" size={24} color="#007AFF" />
+          </TouchableOpacity>
+        ),
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
