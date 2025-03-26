@@ -1,49 +1,43 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { Link } from 'expo-router';
+import { useSelector } from 'react-redux';
+import { RootState } from './store/store';
+import { getTranslations } from './translations';
 import LanguageSelector from './components/LanguageSelector';
-import { Language, translations } from './translations';
 
 // Главный экран выбора приложений
-export default function HomeScreen() {
-  const router = useRouter();
-  const [currentLanguage, setCurrentLanguage] = useState<Language>('ru');
-
-  const t = translations[currentLanguage];
+export default function Home() {
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+  const translations = getTranslations(currentLanguage);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Mini Apps</Text>
-        <LanguageSelector
-          currentLanguage={currentLanguage}
-          onLanguageChange={setCurrentLanguage}
-        />
+        <Text style={styles.title}>{translations.apps}</Text>
+        <LanguageSelector />
       </View>
-
+      
       <View style={styles.appsContainer}>
-        <TouchableOpacity
-          style={styles.appCard}
-          onPress={() => router.push('/dental')}
-        >
-          <View style={[styles.iconContainer, { backgroundColor: '#007AFF' }]}>
-            <Ionicons name="medical" size={40} color="#fff" />
-          </View>
-          <Text style={styles.appTitle}>{t.dental.title}</Text>
-          <Text style={styles.appDescription}>{t.dental.description}</Text>
-        </TouchableOpacity>
+        <Link href="/dental" asChild>
+          <TouchableOpacity style={styles.appCard}>
+            <Image
+              source={require('../assets/dental-icon.png')}
+              style={styles.appIcon}
+            />
+            <Text style={styles.appTitle}>{translations.dentalApp}</Text>
+          </TouchableOpacity>
+        </Link>
 
-        <TouchableOpacity
-          style={styles.appCard}
-          onPress={() => router.push('/app2')}
-        >
-          <View style={[styles.iconContainer, { backgroundColor: '#2C3E50' }]}>
-            <Ionicons name="home" size={40} color="#fff" />
-          </View>
-          <Text style={styles.appTitle}>{t.realEstate.title}</Text>
-          <Text style={styles.appDescription}>{t.realEstate.description}</Text>
-        </TouchableOpacity>
+        <Link href="/app2" asChild>
+          <TouchableOpacity style={styles.appCard}>
+            <Image
+              source={require('../assets/real-estate-icon.png')}
+              style={styles.appIcon}
+            />
+            <Text style={styles.appTitle}>{translations.realEstateApp}</Text>
+          </TouchableOpacity>
+        </Link>
       </View>
     </View>
   );
@@ -52,32 +46,32 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F6FA',
+    backgroundColor: '#f5f5f5',
+    padding: 20,
   },
   header: {
-    padding: 20,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ECF0F1',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 30,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 15,
-    textAlign: 'center',
   },
   appsContainer: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'center',
-    gap: 20,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   appCard: {
+    width: '48%',
     backgroundColor: '#fff',
     borderRadius: 15,
     padding: 20,
     alignItems: 'center',
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -87,23 +81,15 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  iconContainer: {
+  appIcon: {
     width: 80,
     height: 80,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   },
   appTitle: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '600',
     color: '#2C3E50',
-    marginBottom: 5,
-  },
-  appDescription: {
-    fontSize: 14,
-    color: '#7F8C8D',
     textAlign: 'center',
   },
 }); 

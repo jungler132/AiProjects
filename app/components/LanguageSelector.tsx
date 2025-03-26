@@ -1,11 +1,9 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Language } from '../translations';
-
-interface LanguageSelectorProps {
-  currentLanguage: Language;
-  onLanguageChange: (language: Language) => void;
-}
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/store';
+import { setLanguage } from '../store/languageSlice';
 
 const countryCodes: Record<Language, string> = {
   ru: 'ru',
@@ -14,7 +12,10 @@ const countryCodes: Record<Language, string> = {
   en: 'gb',
 };
 
-export default function LanguageSelector({ currentLanguage, onLanguageChange }: LanguageSelectorProps) {
+export default function LanguageSelector() {
+  const dispatch = useDispatch();
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
+
   return (
     <View style={styles.container}>
       {(Object.keys(countryCodes) as Language[]).map((lang) => (
@@ -24,7 +25,7 @@ export default function LanguageSelector({ currentLanguage, onLanguageChange }: 
             styles.flagButton,
             currentLanguage === lang && styles.activeFlag,
           ]}
-          onPress={() => onLanguageChange(lang)}
+          onPress={() => dispatch(setLanguage(lang))}
         >
           <Image
             source={{ uri: `https://flagcdn.com/24x18/${countryCodes[lang]}.png` }}
